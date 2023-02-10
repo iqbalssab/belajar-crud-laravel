@@ -46,8 +46,13 @@ class DashboardPostController extends Controller
             "title" => 'required|max:255',
             "slug" => 'required|unique:posts',
             "category_id" => 'required',
+            'image' => 'image|file|max:1599',
             'body' => 'required'
         ]);
+
+        if($request->file('image')){
+            $validatedData['image'] = $request->file('image')->store('post-images');    
+        }
 
         $validatedData['user_id'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
@@ -65,6 +70,10 @@ class DashboardPostController extends Controller
      */
     public function show(Post $post)
     {
+        if($post->user->id !== auth()->user()->id) {
+            abort(403);
+       }
+
         return view('dashboard.posts.show', [
             'post' => $post
         ]);
@@ -78,7 +87,14 @@ class DashboardPostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if($post->user->id !== auth()->user()->id) {
+            abort(403);
+       }
+
+        return view('dashboard.posts.edit', [
+            'post' => $post,
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -90,7 +106,24 @@ class DashboardPostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $rules = [
+            "title" => 'required|max:255',
+            "category_id" => 'required',
+            'body' => 'required'
+        ];
+
+        // jika slug/title nya tidak berubah
+        if($request->slug != $post->slug){
+            $rules['slug'] = 'required|unique:posts';
+        }
+
+        $validatedData = $request->validate($rules);
+        $validatedData['user_id'] = auth()->user()->id;
+        $validatedData['excerpt'] = Str::limit(strip_tags($request->body), 200);
+
+        $post->update($validatedData);
+
+        return redirect('/dashboard/posts')->with('success', 'New Post Has Been Updated!');
     }
 
     /**
@@ -101,7 +134,9 @@ class DashboardPostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        Post::destroy($post->id);
+
+        return redirect('/dashboard/posts')->with('success', 'Post Has Been Deleted!');
     }
 
     public function checkSlug(Request $request){

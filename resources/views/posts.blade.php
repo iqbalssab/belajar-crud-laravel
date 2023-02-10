@@ -23,7 +23,16 @@
     
     @if ($posts->count())
     <div class="card mb-3">
+        @if ($posts[0]->image)
+            <div style="max-height: 350px; overflow:hidden;">
+                <img src="{{ asset('storage/'. $posts[0]->image) }}" class="card-img-top" alt="{{ $posts[0]->category->name }}">
+            </div>
+                
+            @else
             <img src="https://source.unsplash.com/1200x400?{{ $posts[0]->category->name }}" class="card-img-top" alt="{{ $posts[0]->category->name }}">
+                
+            @endif
+            
             <div class="card-body text-center">
                 {{-- judul --}}
             <h2 class="card-title "><a class="text-decoration-none" href="/posts/{{ $posts[0]->slug }}">{{ $posts[0]->title }}</a>
@@ -58,10 +67,15 @@
                           <a class="text-decoration-none text-light fw-bold" href="/posts?category={{ $post->category->slug }}">{{ $post->category->name }} </a>
                         </small>
                     </div>
+                    @if ($post->image)
+                        <img src="{{ asset('storage/'. $post->image) }}" class="card-img-top " alt="{{ $post->category->name }}" style="overflow:hidden; max-height:300px;">
+                    @else
                     <img src="https://source.unsplash.com/500x350?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}">
+                    @endif
+                   
                     <div class="card-body">
                       <h5 class="card-title">
-                        <a class="text-decoration-none text-dark" href="/posts/{{ $post->slug }}">{{ $post->title }} {{ $post->id }}</a>
+                        <a class="text-decoration-none text-dark" href="/posts/{{ $post->slug }}">{{ $post->title }}</a>
                       </h5>
                         {{--nama author  --}}
                         <p><b><small>

@@ -6,7 +6,7 @@
     </div>
 
     @if(session()->has('success'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success col-lg-8" role="alert">
           {{ session('success') }}
         </div>
     @endif
@@ -29,9 +29,14 @@
             <td><a href="/posts/{{ $post->slug }}" class="fs-6 text-decoration-none text-dark">{{ $post->title }}</a></td>
             <td><a href="/posts?category={{ $post->category->slug }}&user={{ $post->user->username }}">{{ $post->category->name }}</a></td>
             <td>
-              <a href="/dashboard/posts/{{ $post->slug }}" class="badge bg-info text-light mb-1"><span class="" data-feather="eye"></span></a>
-              <a href="#" class="badge bg-warning text-light fw-bold mb-1"><span class="" data-feather="edit"></span></a>
-              <a href="#" class="badge bg-danger text-light fw-bold mb-1"><span class="" data-feather="trash-2"></span></a>
+              <a href="/dashboard/posts/{{ $post->slug }}" class="badge bg-primary text-light mb-1"><span class="" data-feather="eye"></span></a>
+              <a href="/dashboard/posts/{{ $post->slug }}/edit" class="badge bg-warning text-dark fw-bold mb-1"><span class="" data-feather="edit"></span></a>
+              <form action="/dashboard/posts/{{ $post->slug }}" method="post" class="d-inline">
+                @method('delete')
+                @csrf
+                <button class="badge bg-danger border-0" onclick="return confirm('Hapus data?')"><span class="" data-feather="trash-2"></span></button>
+              </form>
+              
             </td>
           </tr>
         @endforeach

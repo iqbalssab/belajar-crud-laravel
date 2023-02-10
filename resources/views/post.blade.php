@@ -16,8 +16,15 @@
                     <small class="text-muted">Diunggah pada : {{ $post->created_at->diffForHumans() }}</small>
                 </i></b></p>
                 
-                <img src="https://source.unsplash.com/1080x720?{{ $post->category->name }}" class="card-img-top mb-3" alt="{{ $post->category->name }}">
-                
+                @if ($post->image)
+                <div style="">
+                    <img src="{{ asset('storage/'. $post->image) }}" class="card-img-top mb-3 mt-3" alt="{{ $post->category->name }}">
+                </div>
+                    
+                @else
+                <img src="https://source.unsplash.com/1080x720?{{ $post->category->name }}" class="card-img-top mb-3 mt-3" alt="{{ $post->category->name }}">
+                    
+                @endif
                 <article>
                     {!! $post->body !!}
                 </article>

@@ -16,7 +16,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // membuat user random otomatis, 5 user
+        // Membuat user secara manual
+        User::create([
+            'name' => 'benk skuy',
+            'username' => 'benk',
+            'email' => 'ibenk@email.com',
+            'password' => bcrypt('password')
+        ]);
+        // membuat user random otomatis, 3 user
         User::factory(3)->create();
 
         // bikin category secara manual
@@ -35,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'slug' => 'web-design'
         ]);
 
-        Post::factory(20)->create();
+        Post::factory(24)->create();
         
     }
 }

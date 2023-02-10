@@ -60,6 +60,7 @@ Route::get('/categories/{category:slug}', function(Category $category){
     ]);
 });
 
+// Halaman daftar postingan berdasarkan user
 Route::get('/authors/{author:username}', function(User $author){
     return view('posts', [
         'title' =>  "Post by Author : $author->name",
@@ -67,18 +68,27 @@ Route::get('/authors/{author:username}', function(User $author){
     ]);
 });
 
+// Menampilkan halaman login
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+
+// Autentikasi user yg sudah terdaftar/belum
 Route::post('/login', [LoginController::class, 'authenticate']);
- 
+
+// proses logout
 Route::post('/logout', [LoginController::class, 'logout']);
 
+// Menampilkan halaman Register
 Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
+// memproses register user baru
 Route::post('/register', [RegisterController::class, 'store']);
 
+// Tampilkan halaman utama dashboard
 Route::get('/dashboard', function (){
     return view('dashboard.index');
 })->middleware('auth');
 
+// Mengatasi CRUD
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
 
+// Route untuk mendapatkan slug di create Post
 Route::get('/dashboard/post/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');

@@ -24,7 +24,7 @@ Route::get('/', function () {
         "title" => "Home",
         "active" => "home",
     ]);
-})->middleware('auth');
+});
 
 Route::get('/about', function () {
     return view('about', [
@@ -80,3 +80,5 @@ Route::get('/dashboard', function (){
 })->middleware('auth');
 
 Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
+
+Route::get('/dashboard/post/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');

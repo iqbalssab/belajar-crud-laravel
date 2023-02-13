@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\DashboardPostController;
 use App\Models\User;
 use App\Models\Category;
@@ -92,3 +93,5 @@ Route::resource('/dashboard/posts', DashboardPostController::class)->middleware(
 
 // Route untuk mendapatkan slug di create Post
 Route::get('/dashboard/post/checkSlug', [DashboardPostController::class, 'checkSlug'])->middleware('auth');
+
+Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('is_admin');
